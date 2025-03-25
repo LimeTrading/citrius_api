@@ -1,8 +1,4 @@
-# citrius_api
-
-core Citrius library
-
-
+/*
 MIT License
 
 Copyright (c) 2025 Lime Trading
@@ -24,7 +20,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+/*
+    Contributors: MAM
+    Creation Date:  March 25th, 2025
+*/
+
+#pragma once
+#include <cstdint>
 
 
-Contributors: MAM
-Creation Date:  March 25th, 2025
+namespace lime::md::citrius
+{
+
+    enum class extended_hours_indicator : std::uint8_t
+    {
+        undefined                           = 0, // reserved
+        not_extended_hours                  = 1,
+        form_t                              = 2,
+        sold_last                           = 3,
+        sold_out_of_sequence                = 4,
+        extended_hours_sold_out_of_sequence = 5   
+    };
+
+} // namespace lime::md::citrius
+
+
+namespace lime
+{
+    using citrius_extended_hours_indicator = md::citrius::extended_hours_indicator;
+} // namespace lime

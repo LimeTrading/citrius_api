@@ -1,8 +1,4 @@
-# citrius_api
-
-core Citrius library
-
-
+/*
 MIT License
 
 Copyright (c) 2025 Lime Trading
@@ -24,7 +20,41 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+/*
+    Contributors: MAM
+    Creation Date:  March 25th, 2025
+*/
+
+#pragma once
+
+namespace lime::message
+{
+
+    #pragma pack(push, 1)
+    template <>
+    struct message<md::citrius::protocol, md::citrius::message_type_indicator::order_cancel> :
+        citrius_message_header
+    {
+        static auto constexpr type = message_type_indicator::order_cancel;
+        
+        message():message_header(type, sizeof(*this)){}
+        static constexpr auto size(){return sizeof(message);}
+
+        big_endian<book_id>                 bookId_;
+        big_endian<order_reference_number>  orderReferenceNumber_;
+        big_endian<abstract_shares>         shares_;
+        big_endian<timestamp>               exchangeTimeStamp_;
+        big_endian<timestamp>               citriusTimeStamp_;
+    };
+    #pragma pack(pop)
+
+} // namespace lime::message
 
 
-Contributors: MAM
-Creation Date:  March 25th, 2025
+namespace lime::md::citrius
+{
+    using order_cancel_message = message::message<protocol, message_type_indicator::order_cancel>;
+    static_assert(sizeof(order_cancel_message) == 39);
+}

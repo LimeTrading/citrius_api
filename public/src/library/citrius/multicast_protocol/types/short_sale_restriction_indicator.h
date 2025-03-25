@@ -1,8 +1,4 @@
-# citrius_api
-
-core Citrius library
-
-
+/*
 MIT License
 
 Copyright (c) 2025 Lime Trading
@@ -24,7 +20,36 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+/*
+    Contributors: MAM
+    Creation Date:  March 25th, 2025
+*/
+
+#pragma once
+
+#include <cstdint>
 
 
-Contributors: MAM
-Creation Date:  March 25th, 2025
+namespace lime::md::citrius
+{
+
+    enum class short_sale_restriction_indicator : std::uint8_t
+    {
+        undefined                               = 0, // reserved
+        short_sale_restriction_activated        = 1,
+        short_sale_restriction_in_effect        = 2,
+        short_sale_restriction_continued        = 3,
+        short_sale_restriction_not_in_effect    = 4,
+        short_sale_restriction_deactivated      = 5,
+        unknown                                 = 6  
+    };
+
+} // namespace lime::md::citrius
+
+
+namespace lime
+{
+    using citrius_short_sale_restriction_indicator = md::citrius::short_sale_restriction_indicator;
+} // namespace lime

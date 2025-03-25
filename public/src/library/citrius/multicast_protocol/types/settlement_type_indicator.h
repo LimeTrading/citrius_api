@@ -1,8 +1,4 @@
-# citrius_api
-
-core Citrius library
-
-
+/*
 MIT License
 
 Copyright (c) 2025 Lime Trading
@@ -24,7 +20,35 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+/*
+    Contributors: MAM
+    Creation Date:  March 25th, 2025
+*/
+
+#pragma once
+
+#include <cstdint>
 
 
-Contributors: MAM
-Creation Date:  March 25th, 2025
+namespace lime::md::citrius
+{
+
+    enum class settlement_type_indicator : std::uint8_t
+    {
+        undefined               = 0, // reserved
+        regular                 = 1,
+        cash_trade              = 2,
+        next_day                = 3,
+        seller                  = 4,
+        yellow_flag             = 5 
+    };
+
+} // namespace lime::md::citrius
+
+
+namespace lime
+{
+    using citrius_settlement_type_indicator = md::citrius::settlement_type_indicator;
+} // namespace lime

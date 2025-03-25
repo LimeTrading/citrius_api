@@ -1,8 +1,4 @@
-# citrius_api
-
-core Citrius library
-
-
+#/*
 MIT License
 
 Copyright (c) 2025 Lime Trading
@@ -24,7 +20,36 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+/*
+    Contributors: MAM
+    Creation Date:  March 25th, 2025
+*/
+
+#pragma once
+
+#include <cstdint>
 
 
-Contributors: MAM
-Creation Date:  March 25th, 2025
+namespace lime::md::citrius
+{
+
+    enum class feed_format : std::uint8_t
+    {
+        undefined                           = 0,    // reserved
+        national_consolidated_top_of_book   = 1,
+        depth_of_book                       = 2,
+        consolidated_top_of_book            = 3,
+        top_of_book                         = 4,
+        trades                              = 5,
+        imbalance                           = 6
+    };
+
+} // namespace lime::md::citrius
+
+
+namespace lime
+{
+    using citrius_feed_format = md::citrius::feed_format;
+} // namespace lime

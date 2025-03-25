@@ -1,8 +1,4 @@
-# citrius_api
-
-core Citrius library
-
-
+/*
 MIT License
 
 Copyright (c) 2025 Lime Trading
@@ -24,7 +20,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+/*
+    Contributors: MAM
+    Creation Date:  March 25th, 2025
+*/
+
+#pragma once
+
+#include <cstdint>
 
 
-Contributors: MAM
-Creation Date:  March 25th, 2025
+namespace lime::md::citrius
+{
+
+    enum class buy_sell_indicator : std::uint8_t
+    {
+        undefined   = 0, // reserved
+        buy         = 2,
+        sell        = 3, 
+        both        = 4,
+        none        = 5
+    }; // class buy_sell_indicator
+
+} // namespace lime::md::citrius
+
+
+namespace lime
+{
+    using citrius_buy_sell_indicator = md::citrius::buy_sell_indicator;
+} // namespace lime

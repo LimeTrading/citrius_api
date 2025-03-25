@@ -1,8 +1,4 @@
-# citrius_api
-
-core Citrius library
-
-
+/*
 MIT License
 
 Copyright (c) 2025 Lime Trading
@@ -24,7 +20,43 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+/*
+    Contributors: MAM
+    Creation Date:  March 25th, 2025
+*/
+
+#pragma once
+
+#include <cstdint>
 
 
-Contributors: MAM
-Creation Date:  March 25th, 2025
+namespace lime::message
+{
+
+    #pragma pack(push, 1)
+    template <>
+    struct message<md::citrius::protocol, md::citrius::message_type_indicator::trading_session> :
+        citrius_message_header
+    {
+        static auto constexpr type = message_type_indicator::trading_session;
+        
+        message():message_header(type, sizeof(*this)){}
+        static constexpr auto size(){return sizeof(message);}
+
+        big_endian<book_id>                    bookId_;
+        big_endian<trading_session_indicator>  tradingSessionIndicator_;
+        big_endian<timestamp>                  exchangeTimeStamp_;
+        big_endian<timestamp>                  citriusTimeStamp_;
+    };
+    #pragma pack(pop)
+
+} // namespace lime::message
+
+
+namespace lime::md::citrius
+{
+    using trading_session_message = message::message<protocol, message_type_indicator::trading_session>;
+    static_assert(sizeof(trading_session_message) == 28);
+}

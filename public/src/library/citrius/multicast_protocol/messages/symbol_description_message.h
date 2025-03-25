@@ -1,8 +1,4 @@
-# citrius_api
-
-core Citrius library
-
-
+/*
 MIT License
 
 Copyright (c) 2025 Lime Trading
@@ -24,7 +20,45 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+/*
+    Contributors: MAM
+    Creation Date:  March 25th, 2025
+*/
+
+#pragma once
+
+#include <cstdint>
+#include <array>
 
 
-Contributors: MAM
-Creation Date:  March 25th, 2025
+namespace lime::message
+{
+
+    #pragma pack(push, 1)
+    template <>
+    struct message<md::citrius::protocol, md::citrius::message_type_indicator::symbol_description> :
+        citrius_message_header
+    {
+        static auto constexpr type = message_type_indicator::symbol_description;
+        
+        message():message_header(type, sizeof(*this)){}
+        static constexpr auto size(){return sizeof(message);}
+
+        big_endian<symbol_name>         symbol_;
+        big_endian<book_id>             bookId_;
+        big_endian<multicast_id>        multicastId_;
+        std::array<std::uint8_t, 11>    reserved_;
+    };
+    #pragma pack(pop)
+
+
+} // namespace lime::message
+
+
+namespace lime::md::citrius
+{
+    using symbol_description_message = message::message<md::citrius::protocol, message_type_indicator::symbol_description>;
+    static_assert(sizeof(symbol_description_message) == 62);
+}

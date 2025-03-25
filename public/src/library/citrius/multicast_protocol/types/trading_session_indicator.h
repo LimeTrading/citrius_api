@@ -1,8 +1,4 @@
-# citrius_api
-
-core Citrius library
-
-
+/*
 MIT License
 
 Copyright (c) 2025 Lime Trading
@@ -24,7 +20,36 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+/*
+    Contributors: MAM
+    Creation Date:  March 25th, 2025
+*/
+
+#pragma once
+
+#include <cstdint>
 
 
-Contributors: MAM
-Creation Date:  March 25th, 2025
+namespace lime::md::citrius
+{
+
+    enum class trading_session_indicator : std::uint8_t
+    {
+        undefined                   = 0, // reserved
+        morning                     = 1,
+        normal                      = 2,
+        morning_and_normal          = 3,
+        late                        = 4,
+        normal_and_late             = 6,
+        morning_normal_and_late     = 7
+    };
+
+} // namespace lime::md::citrius
+
+
+namespace lime
+{
+    using citrius_trading_session_indicator = md::citrius::trading_session_indicator;
+} // namespace lime
