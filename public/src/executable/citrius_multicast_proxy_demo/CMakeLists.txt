@@ -40,5 +40,6 @@ PUBLIC ${_citrius_api_dir}/public/src
 
 target_link_libraries(${EXECUTABLE_NAME}
 PUBLIC 
-    market_feed
+    pthread
+    citrius
 )
