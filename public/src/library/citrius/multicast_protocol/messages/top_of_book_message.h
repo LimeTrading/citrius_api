@@ -1,33 +1,5 @@
-/*
-MIT License
-
-Copyright (c) 2025 Lime Trading
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
-
-/*
-    Contributors: MAM
-    Creation Date:  March 25th, 2025
-*/
-
 #pragma once
+
 #include <include/quotation.h>
 
 #include <array>
@@ -74,10 +46,10 @@ namespace lime::message
             {
             }
 
-            participant_indicator   participantIndicator_;
-            std::array<char, 4>     mpid_;
-            shares_type             shares_; 
-            price_type              price_;
+            big_endian<participant_indicator>   participantIndicator_;
+            std::array<char, 4>                 mpid_;
+            big_endian<shares_type>             shares_; 
+            big_endian<price_type>              price_;
         };
 
 
@@ -108,7 +80,7 @@ namespace lime::message
         big_endian<quote_condition_indicator>   quoteConditionIndicator_;
         // struct is dynamically sized. the appendage fields might or might not exist.
         // check nbbo indicator flags and use helper function below.
-        std::array<big_endian<abstract_bid_appendage>, 2> appendages_;
+        std::array<abstract_bid_appendage, 2>   appendages_;
     };
     #pragma pack(pop)
 
@@ -161,7 +133,7 @@ static inline auto const * lime::md::citrius::get_bid_appendage
 )
 {
     auto hasBidAppendage = has_bid_appendage(topOfBookMessage);
-    return (hasBidAppendage ? reinterpret_cast<big_endian<top_of_book_message::nbbo_bid_appendage> const *>(&topOfBookMessage.appendages_[0]) : nullptr);
+    return (hasBidAppendage ? reinterpret_cast<top_of_book_message::nbbo_bid_appendage const *>(&topOfBookMessage.appendages_[0]) : nullptr);
 }
 
 
@@ -174,5 +146,5 @@ static inline auto const * lime::md::citrius::get_ask_appendage
 {
     auto hasAskAppendage = has_ask_appendage(topOfBookMessage);
     auto hasBidAppendage = has_bid_appendage(topOfBookMessage);
-    return (hasAskAppendage ? reinterpret_cast<big_endian<top_of_book_message::nbbo_ask_appendage> const *>(&topOfBookMessage.appendages_[hasBidAppendage]) : nullptr);
+    return (hasAskAppendage ? reinterpret_cast<top_of_book_message::nbbo_ask_appendage const *>(&topOfBookMessage.appendages_[hasBidAppendage]) : nullptr);
 }
