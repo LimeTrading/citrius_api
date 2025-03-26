@@ -55,7 +55,9 @@ namespace lime::md
     {
         using protocol = T1;
         using sequence_number = lime::md::sequence_number<T1, T2>;
+
         struct packet_header; // implementation required
+
     }; // market_feed_traits
 
 
@@ -66,9 +68,13 @@ namespace lime::md
     //=========================================================================
     template <typename target_type, market_feed_traits_concept market_feed_traits_type>
     class market_feed :
+        virtual non_copyable,
+        virtual non_movable,
         public message::receiver<target_type, typename market_feed_traits_type::protocol>
     {
     public:
+
+        template <network::network_mode> friend class market_feed_interface;
 
         using target = target_type; 
         using market_feed_traits = market_feed_traits_type;
@@ -95,30 +101,31 @@ namespace lime::md
             close_handler           closeHandler_;
         };
 
+        void close();
+
+        virtual ~market_feed() = default;
+
+    protected:
+
         market_feed
         (
             event_handlers
         );
 
-        ~market_feed() = default;
-
         template <network::network_mode N>
-        void connect
+        bool connect
         (
             network::virtual_network_interface<N> & virtualNetworkInterface,
-            std::function<void(std::span<char const>)> callback,
             market_feed_socket::configuration const & config
         )
         {
-            socket_.connect(virtualNetworkInterface, callback, config);
+            return socket_.connect(virtualNetworkInterface, [this](auto packet){this->process_packet(packet);}, config);
         }
         
         void process_packet
         (
             std::span<char const>
         );
-
-        void close();
 
     private:
 
@@ -210,8 +217,10 @@ void lime::md::market_feed<target_type, market_feed_traits>::process_packet
         on_sequence_gap(sequenceNumber);
         currentSequenceNumber_ = sequenceNumber;
     }
+
     if (auto remaining = this->process(get_message_data(packetHeader)); not remaining.empty())
         on_data_error(remaining); // data remaining in packet after parse (alignment bytes perhaps?)
+
     currentSequenceNumber_ = get_next_sequence_number(currentSequenceNumber_, packetHeader); 
 }
 
