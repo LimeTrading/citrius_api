@@ -47,6 +47,17 @@ execute_process(
 set(PROJECT_NAME citrius_api)
 project(${PROJECT_NAME})
 
+if(NOT GIT_BRANCH)
+    execute_process(
+        COMMAND git rev-parse --abbrev-ref HEAD
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE DEFAULT_GIT_BRANCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    set(GIT_BRANCH "${DEFAULT_GIT_BRANCH}")
+endif()
+
+
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -71,7 +82,7 @@ endif()
 
 ###############################################################################
 include("./scripts/fetch_dependencies.cmake")
-fetch_dependency("https://github.com/LimeTrading/lime_api.git;master")
+fetch_dependency("https://github.com/LimeTrading/lime_api.git;release/V1_0_0")
 
 set(CMAKE_INSTALL_LIBDIR /usr/lib64)
 set(_${PROJECT_NAME}_dir ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "")
