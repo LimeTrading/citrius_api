@@ -69,7 +69,6 @@ function(fetch_dependency dependency)
         GIT_TAG ${tag}
         SOURCE_DIR        "${CMAKE_BINARY_DIR}/${repo_name}-src"
         BINARY_DIR        "${CMAKE_BINARY_DIR}/${repo_name}-build"
-        INSTALL_DIR       "${CMAKE_BINARY_DIR}"
         )
     FetchContent_MakeAvailable(${repo_name})
     FetchContent_GetProperties(${repo_name})
