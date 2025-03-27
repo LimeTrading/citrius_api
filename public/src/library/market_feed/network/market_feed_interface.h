@@ -110,9 +110,6 @@ auto lime::md::market_feed_interface<N>::join_multicast
 ) -> std::unique_ptr<recipient>
 {
     auto marketFeed = std::make_unique<recipient>(std::forward<Ts>(args) ...);
-    marketFeed->connect(*virtualNetworkInterface_, 
-            [marketFeed = marketFeed.get()](auto packetData){marketFeed->process_packet(packetData);},
-            {.socketAddress_ = socketAddress, .receiveBufferSize_ = ((1 << 20) * 64)});
-
+    marketFeed->connect(*virtualNetworkInterface_, {.socketAddress_ = socketAddress, .receiveBufferSize_ = ((1 << 20) * 64)});
     return marketFeed;
 }

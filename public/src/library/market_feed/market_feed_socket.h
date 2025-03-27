@@ -86,7 +86,7 @@ namespace lime::md
         void close();
 
         template <network::network_mode N>
-        void connect
+        bool connect
         (
             network::virtual_network_interface<N> &,
             std::function<void(std::span<char const>)>,
