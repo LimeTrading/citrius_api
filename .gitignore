@@ -33,8 +33,5 @@
 
 build/
 ./vscode
-./.*
-
 .~lock*
 *.odt
-
