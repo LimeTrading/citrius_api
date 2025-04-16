@@ -30,4 +30,4 @@ SOFTWARE.
 #pragma once
 
 #include "./market_feed.h"
-#include "./citrius/multicast_protocol.h"
+#include "./citrius/citrius_protocol.h"

@@ -71,7 +71,7 @@ endif()
 
 ###############################################################################
 include("./scripts/fetch_dependencies.cmake")
-fetch_dependency("https://github.com/LimeTrading/lime_api.git;master")
+fetch_dependency("https://github.com/LimeTrading/lime_api.git;release/V1_0_1")
 
 set(CMAKE_INSTALL_LIBDIR /usr/lib64)
 set(_${PROJECT_NAME}_dir ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "")

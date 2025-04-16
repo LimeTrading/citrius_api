@@ -36,6 +36,23 @@ SOFTWARE.
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <functional>
+#include <span>
+#include <chrono>
+#include <map>
+#include <mutex>
+
+
+
+namespace lime::network
+{
+
+    enum class network_mode : std::uint32_t;
+
+    template <network_mode>
+    class virtual_network_interface;
+
+} // lime::network
 
 
 namespace lime::md

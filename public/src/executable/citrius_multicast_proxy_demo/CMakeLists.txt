@@ -31,10 +31,10 @@ add_executable(${EXECUTABLE_NAME}
     ./main.cpp
 )
 
-
 target_include_directories(${EXECUTABLE_NAME}  
 PUBLIC ${_lime_api_dir}/public/src 
 PUBLIC ${_citrius_api_dir}/public/src
+PUBLIC ${_json_dir}/include
 )
 
 
