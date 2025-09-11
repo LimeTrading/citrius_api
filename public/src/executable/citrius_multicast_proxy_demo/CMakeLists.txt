@@ -41,5 +41,5 @@ PUBLIC ${_citrius_api_dir}/public/src
 target_link_libraries(${EXECUTABLE_NAME}
 PUBLIC 
     pthread
-    citrius
+    ${CMAKE_SOURCE_DIR}/lib/libcitrius.so
 )
