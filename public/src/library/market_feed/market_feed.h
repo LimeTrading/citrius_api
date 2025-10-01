@@ -48,7 +48,6 @@ SOFTWARE.
 namespace lime::md
 {
 
-
     //=========================================================================
     template <message::protocol_concept T1, sequence_number_traits_concept T2>
     struct market_feed_traits
@@ -59,7 +58,13 @@ namespace lime::md
         struct packet_header; // implementation required
 
     }; // market_feed_traits
+}
 
+
+
+
+namespace lime::md
+{
 
     template <typename T>
     concept market_feed_traits_concept = std::is_same_v<T, market_feed_traits<typename T::protocol, typename T::sequence_number::traits>>;
@@ -86,6 +91,8 @@ namespace lime::md
         using data_error_handler = std::function<void(market_feed const &, std::span<char const>)>;
         using close_handler = std::function<void(market_feed const &)>;
         using sequence_gap_handler = std::function<void(market_feed const &, sequence_number, std::uint64_t)>;
+        using packet_begin_handler = std::function<void(market_feed const &, packet_header const &)>;
+        using packet_end_handler = std::function<void(market_feed const &)>;
 
         struct configuration
         {
@@ -99,6 +106,8 @@ namespace lime::md
             data_error_handler      dataErrorHandler_;
             sequence_gap_handler    sequenceGapHandler_;
             close_handler           closeHandler_;
+            packet_begin_handler    packetBeginHandler_;
+            packet_end_handler      packetEndHandler_;
         };
 
         void close();
@@ -144,6 +153,8 @@ namespace lime::md
         data_error_handler      dataErrorHandler_;
         sequence_gap_handler    sequenceGapHandler_;
         close_handler           closeHandler_;
+        packet_begin_handler    packetBeginHandler_;
+        packet_end_handler      packetEndHandler_;
         sequence_number         currentSequenceNumber_;
         market_feed_socket      socket_;
     };
@@ -167,6 +178,8 @@ lime::md::market_feed<target_type, market_feed_traits>::market_feed
     dataErrorHandler_(eventHandlers.dataErrorHandler_),
     sequenceGapHandler_(eventHandlers.sequenceGapHandler_),
     closeHandler_(eventHandlers.closeHandler_),
+    packetBeginHandler_(eventHandlers.packetBeginHandler_),
+    packetEndHandler_(eventHandlers.packetEndHandler_),
     socket_({.closeHandler_ = [this](auto const &){this->on_close();}})
 {
 }
@@ -209,6 +222,8 @@ void lime::md::market_feed<target_type, market_feed_traits>::process_packet
     }
     auto beg = packetData.data();
     auto const & packetHeader = *reinterpret_cast<packet_header const *>(beg);
+    if (packetBeginHandler_)
+        packetBeginHandler_(*this, packetHeader);
     auto sequenceNumber = get_sequence_number(packetHeader);
     if (sequenceNumber != currentSequenceNumber_)
     {
@@ -220,6 +235,9 @@ void lime::md::market_feed<target_type, market_feed_traits>::process_packet
 
     if (auto remaining = this->process(get_message_data(packetHeader)); not remaining.empty())
         on_data_error(remaining); // data remaining in packet after parse (alignment bytes perhaps?)
+
+    if (packetEndHandler_)
+        packetEndHandler_(*this);
 
     currentSequenceNumber_ = get_next_sequence_number(currentSequenceNumber_, packetHeader); 
 }

@@ -50,7 +50,9 @@ public:
         {
             .dataErrorHandler_ = [](auto const &, auto data){std::cout << "data error encountered. bytes = " << data.size() << "          \n";},
             .sequenceGapHandler_ = [](auto const &, auto sequenceNumber, auto gapSize){std::cout << "gap encountered [" << sequenceNumber.get() << " -> " << (sequenceNumber.get() + gapSize - 1) << "]         \n";},
-            .closeHandler_ = [](auto const &){std::cout << "stream has closed           \n";}
+            .closeHandler_ = [](auto const &){std::cout << "stream has closed           \n";},
+            .packetBeginHandler_ = [](auto const &, auto const & packetHeader){},
+            .packetEndHandler_ = [](auto const &){}
         })
     {
     }
@@ -93,6 +95,7 @@ private:
 };
 
 
+
 //=============================================================================
 int main 
 (
@@ -100,9 +103,17 @@ int main
     char **
 )
 {
+
+    using namespace std::string_literals;
+
     //=========================================================================
     // 1: create an efvi based multicast receiver
-    lime::md::efvi_market_feed_interface marketFeedInterface;
+//=========================================================================
+// 1: create an efvi based multicast receiver
+lime::md::efvi_market_feed_interface marketFeedInterface(
+        lime::md::efvi_market_feed_interface::configuration{
+           
+        });
 
     //=========================================================================
     // 2: configure the desired number of polling threads and the desired number of packet processing threads.
