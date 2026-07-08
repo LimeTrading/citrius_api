@@ -72,8 +72,8 @@ namespace lime::message
 
         big_endian<book_id>                     bookId_;
         big_endian<nbbo_indicator>              nbboIndicator_;
-        big_endian<bid_quote>                   bid_;
-        big_endian<ask_quote>                   ask_;
+        bid_quote                               bid_; //big endian is under the hood
+        ask_quote                               ask_; //big endian is under the hood
         big_endian<timestamp>                   exchangeTimeStamp_;
         big_endian<timestamp>                   citriusTimeStamp_;
         big_endian<order_reference_number>      orderReferenceNumber_;
